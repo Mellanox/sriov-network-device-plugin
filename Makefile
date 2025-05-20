@@ -2,6 +2,10 @@
 # Credit:
 #   This makefile was adapted from: https://github.com/vincentbernat/hellogopher/blob/feature/glide/Makefile
 #
+
+# License targets
+include make/license.mk
+
 # Go environment
 export GOPATH?=$(shell go env GOPATH)
 BINDIR=$(CURDIR)/bin
