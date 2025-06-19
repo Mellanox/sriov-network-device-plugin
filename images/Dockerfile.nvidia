@@ -37,6 +37,9 @@ ARG TARGETVARIANT
 COPY --from=builder /usr/src/sriov-network-device-plugin/build/sriovdp /usr/bin/
 WORKDIR /
 
+RUN apt-get update && apt-get install -y --no-install-recommends kmod=29-1ubuntu1 && \
+    rm -rf /var/lib/apt/lists/*
+
 COPY --from=builder /usr/src/sriov-network-device-plugin ./src
 
 LABEL io.k8s.display-name="SRIOV Network Device Plugin"
