@@ -21,16 +21,15 @@ import (
 	"path/filepath"
 	"time"
 
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/extensions/table"
+	. "github.com/onsi/gomega"
 	pluginapi "k8s.io/kubelet/pkg/apis/deviceplugin/v1beta1"
 
 	CDImocks "github.com/k8snetworkplumbingwg/sriov-network-device-plugin/pkg/cdi/mocks"
 	"github.com/k8snetworkplumbingwg/sriov-network-device-plugin/pkg/types"
 	"github.com/k8snetworkplumbingwg/sriov-network-device-plugin/pkg/types/mocks"
 	"github.com/k8snetworkplumbingwg/sriov-network-device-plugin/pkg/utils"
-
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/ginkgo/extensions/table"
-	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("Server", func() {
@@ -50,7 +49,7 @@ var _ = Describe("Server", func() {
 				Expect(rs.resourcePool.GetResourceName()).To(Equal("fakename"))
 				Expect(rs.resourceNamePrefix).To(Equal("fakeprefix"))
 				Expect(rs.endPoint).To(Equal("fakeprefix_fakename.fakesuffix"))
-				Expect(rs.pluginWatch).To(Equal(true))
+				Expect(rs.pluginWatch).To(BeTrue())
 				Expect(rs.sockPath).To(Equal(filepath.Join(types.SockDir, "fakeprefix_fakename.fakesuffix")))
 			})
 			It("should have the properties correctly assigned when plugin watcher disabled", func() {
@@ -60,7 +59,7 @@ var _ = Describe("Server", func() {
 				Expect(rs.resourcePool.GetResourceName()).To(Equal("fakename"))
 				Expect(rs.resourceNamePrefix).To(Equal("fakeprefix"))
 				Expect(rs.endPoint).To(Equal("fakeprefix_fakename.fakesuffix"))
-				Expect(rs.pluginWatch).To(Equal(false))
+				Expect(rs.pluginWatch).To(BeFalse())
 				Expect(rs.sockPath).To(Equal(filepath.Join(types.DeprecatedSockDir,
 					"fakeprefix_fakename.fakesuffix")))
 			})
@@ -291,7 +290,7 @@ var _ = Describe("Server", func() {
 
 			resp, err := rs.Allocate(context.TODO(), req)
 
-			Expect(len(resp.GetContainerResponses())).To(Equal(expectedRespLength))
+			Expect(resp.GetContainerResponses()).To(HaveLen(expectedRespLength))
 
 			if shouldFail {
 				Expect(err).To(HaveOccurred())
@@ -343,7 +342,7 @@ var _ = Describe("Server", func() {
 
 			resp, err := rs.Allocate(context.TODO(), req)
 
-			Expect(len(resp.GetContainerResponses())).To(Equal(expectedRespLength))
+			Expect(resp.GetContainerResponses()).To(HaveLen(expectedRespLength))
 
 			if shouldFail {
 				Expect(err).To(HaveOccurred())
@@ -371,7 +370,7 @@ var _ = Describe("Server", func() {
 		It("should not fail", func() {
 			rs := &resourceServer{}
 			resp, err := rs.PreStartContainer(context.TODO(), nil)
-			Expect(resp).NotTo(Equal(nil))
+			Expect(resp).NotTo(BeNil())
 			Expect(err).NotTo(HaveOccurred())
 		})
 	})
@@ -379,7 +378,7 @@ var _ = Describe("Server", func() {
 		It("should not fail", func() {
 			rs := &resourceServer{}
 			resp, err := rs.GetDevicePluginOptions(context.TODO(), nil)
-			Expect(resp).NotTo(Equal(nil))
+			Expect(resp).NotTo(BeNil())
 			Expect(err).NotTo(HaveOccurred())
 		})
 	})
