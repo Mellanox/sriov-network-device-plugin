@@ -18,6 +18,10 @@ on:
     - cron: '0 0 * * *' # nightly
   workflow_dispatch:    # enable manual trigger
 
+permissions:
+  contents: write
+  workflows: write
+
 jobs:
   call-reusable-sync-fork-workflow:
     uses: Mellanox/cloud-orchestration-reusable-workflows/.github/workflows/fork-sync-reusable.yml@main
