@@ -28,7 +28,7 @@ RUN apt-get update && \
     GOOS=linux GOARCH=${TARGETARCH} GOARM=${TARGETVARIANT} make clean && \
     GOOS=linux GOARCH=${TARGETARCH} GOARM=${TARGETVARIANT} make build
 
-FROM nvcr.io/nvidia/doca/doca:3.0.0-base-rt-host
+FROM nvcr.io/nvidia/doca/doca:3.1.0-base-rt-host
 
 ARG TARGETPLATFORM
 ARG TARGETARCH
