@@ -35,7 +35,7 @@ RUN apt-get update && \
 FROM alpine:3 AS pkgs
 RUN apk add --no-cache hwdata-pci kmod
 
-FROM nvcr.io/nvidia/distroless/go:v3.1.12-dev
+FROM nvcr.io/nvidia/distroless/go:v3.1.13-dev
 
 USER 0:0
 SHELL ["/busybox/sh", "-c"]
