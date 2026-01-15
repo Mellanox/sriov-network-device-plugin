@@ -293,14 +293,14 @@ var _ = Describe("Server", func() {
 		},
 		Entry("allocating successfully 1 deviceID",
 			&pluginapi.AllocateRequest{
-				ContainerRequests: []*pluginapi.ContainerAllocateRequest{{DevicesIDs: []string{"00:00.01"}}},
+				ContainerRequests: []*pluginapi.ContainerAllocateRequest{{DevicesIds: []string{"00:00.01"}}},
 			},
 			1,
 			false,
 		),
 		PEntry("allocating deviceID that does not exist",
 			&pluginapi.AllocateRequest{
-				ContainerRequests: []*pluginapi.ContainerAllocateRequest{{DevicesIDs: []string{"00:00.02"}}},
+				ContainerRequests: []*pluginapi.ContainerAllocateRequest{{DevicesIds: []string{"00:00.02"}}},
 			},
 			0,
 			true,
@@ -345,14 +345,14 @@ var _ = Describe("Server", func() {
 		},
 		Entry("allocating successfully 1 deviceID",
 			&pluginapi.AllocateRequest{
-				ContainerRequests: []*pluginapi.ContainerAllocateRequest{{DevicesIDs: []string{"00:00.01"}}},
+				ContainerRequests: []*pluginapi.ContainerAllocateRequest{{DevicesIds: []string{"00:00.01"}}},
 			},
 			1,
 			false,
 		),
 		PEntry("allocating deviceID that does not exist",
 			&pluginapi.AllocateRequest{
-				ContainerRequests: []*pluginapi.ContainerAllocateRequest{{DevicesIDs: []string{"00:00.02"}}},
+				ContainerRequests: []*pluginapi.ContainerAllocateRequest{{DevicesIds: []string{"00:00.02"}}},
 			},
 			0,
 			true,
