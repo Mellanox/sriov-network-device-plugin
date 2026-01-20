@@ -33,7 +33,7 @@ ENV HTTPS_PROXY=$https_proxy
 RUN apk add --no-cache build-base linux-headers && \
     cd /usr/src/sriov-network-device-plugin && \
     GOOS=linux GOARCH=${TARGETARCH} GOARM=${TARGETVARIANT} make clean && \
-    GOOS=linux GOARCH=${TARGETARCH} GOARM=${TARGETVARIANT} make build
+    GOOS=linux GOARCH=${TARGETARCH} GOARM=${TARGETVARIANT} STATIC=1 make build
 
 FROM alpine:3 AS pkgs
 RUN apk add --no-cache hwdata-pci kmod
