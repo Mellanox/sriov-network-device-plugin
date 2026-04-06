@@ -74,18 +74,6 @@ jobs:
       - name: lint test
         run: make lint
 
-  shellcheck:
-    name: Shellcheck
-    runs-on: ubuntu-24.04
-    env:
-      SHELLCHECK_OPTS: -e SC3037 # disabled because of false issue in entrypoint.sh ln 14-21. Not using any complicated flags. Works with alpines almquist shell.
-    steps:
-    - uses: actions/checkout@v6
-    - name: Run ShellCheck
-      uses: ludeeus/action-shellcheck@master
-      with:
-        ignore: vendor
-
   hadolint:
     runs-on: ubuntu-24.04
     name: Hadolint

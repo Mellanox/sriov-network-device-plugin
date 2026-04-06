@@ -34,6 +34,9 @@ RUN apk add --no-cache build-base linux-headers && \
     cd /usr/src/sriov-network-device-plugin && \
     GOOS=linux GOARCH=${TARGETARCH} GOARM=${TARGETVARIANT} make clean && \
     GOOS=linux GOARCH=${TARGETARCH} GOARM=${TARGETVARIANT} STATIC=1 make build
+RUN cd /usr/src/sriov-network-device-plugin && \
+    CGO_ENABLED=0 GOOS=linux GOARCH=${TARGETARCH} \
+    go build -o build/entrypoint -tags no_openssl ./cmd/entrypoint/
 
 FROM alpine:3 AS pkgs
 RUN apk add --no-cache hwdata-pci kmod
@@ -41,15 +44,13 @@ RUN apk add --no-cache hwdata-pci kmod
 FROM ${BASE_IMAGE_GO_DISTROLESS_DEV:-nvcr.io/nvidia/distroless/go:v3.2.1-dev}
 
 USER 0:0
-SHELL ["/busybox/sh", "-c"]
-RUN ln -s /busybox/sh /bin/sh
 
 ARG TARGETPLATFORM
 ARG TARGETARCH
 ARG TARGETVARIANT
 
 COPY --from=builder /usr/src/sriov-network-device-plugin/build/sriovdp /usr/bin/
-RUN mkdir -p /usr/share/hwdata
+COPY --from=builder /usr/src/sriov-network-device-plugin/build/entrypoint /entrypoint
 COPY --from=pkgs /usr/share/hwdata/pci.ids /usr/share/hwdata/pci.ids
 COPY --from=pkgs /sbin/lsmod /sbin/lsmod
 
@@ -59,6 +60,4 @@ COPY --from=builder /usr/src/sriov-network-device-plugin ./src
 
 LABEL io.k8s.display-name="SRIOV Network Device Plugin"
 
-ADD ./images/entrypoint.sh /
-
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint"]
