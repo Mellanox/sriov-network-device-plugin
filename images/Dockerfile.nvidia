@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG BASE_IMAGE_GO_DISTROLESS_DEV
+ARG BASE_IMAGE_GO_DISTROLESS
 
 FROM --platform=$BUILDPLATFORM golang:1.25-alpine AS builder
 
@@ -38,18 +38,15 @@ RUN apk add --no-cache build-base linux-headers && \
 FROM alpine:3 AS pkgs
 RUN apk add --no-cache hwdata-pci kmod
 
-FROM ${BASE_IMAGE_GO_DISTROLESS_DEV:-nvcr.io/nvidia/distroless/go:v3.2.1-dev}
+FROM ${BASE_IMAGE_GO_DISTROLESS:-nvcr.io/nvidia/distroless/go:v4.0.4}
 
 USER 0:0
-SHELL ["/busybox/sh", "-c"]
-RUN ln -s /busybox/sh /bin/sh
 
 ARG TARGETPLATFORM
 ARG TARGETARCH
 ARG TARGETVARIANT
 
 COPY --from=builder /usr/src/sriov-network-device-plugin/build/sriovdp /usr/bin/
-RUN mkdir -p /usr/share/hwdata
 COPY --from=pkgs /usr/share/hwdata/pci.ids /usr/share/hwdata/pci.ids
 COPY --from=pkgs /sbin/lsmod /sbin/lsmod
 
@@ -59,6 +56,4 @@ COPY --from=builder /usr/src/sriov-network-device-plugin ./src
 
 LABEL io.k8s.display-name="SRIOV Network Device Plugin"
 
-ADD ./images/entrypoint.sh /
-
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/sriovdp"]
